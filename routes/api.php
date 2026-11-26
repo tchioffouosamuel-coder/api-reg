@@ -48,6 +48,8 @@ Route::apiResource('projects', ProjectController::class)->middleware('auth:sanct
 Route::apiResource('news', NewsController::class)->middleware('auth:sanctum');
 Route::apiResource('gallery', GalleryItemController::class)->middleware('auth:sanctum');
 
-// Registrations (read-only)
+// Registrations
 Route::get('/registrations', [RegistrationController::class, 'index'])->middleware('auth:sanctum');
-Route::get('/registrations/{id}', [RegistrationController::class, 'show'])->middleware('auth:sanctum');
+Route::get('/registrations/{registration}', [RegistrationController::class, 'show'])->middleware('auth:sanctum');
+Route::patch('/registrations/{registration}/check-in', [RegistrationController::class, 'checkIn'])->middleware('auth:sanctum');
+Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy'])->middleware('auth:sanctum');

@@ -9,6 +9,53 @@ use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
+    public function index(Request $request): JsonResponse
+    {
+        $query = Registration::query()->latest();
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->string('type'));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->string('status'));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->string('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")
+                    ->orWhere('telephone', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('reference_label', 'like', "%{$search}%");
+            });
+        }
+
+        return response()->json($query->get());
+    }
+
+    public function show(Registration $registration): JsonResponse
+    {
+        return response()->json($registration);
+    }
+
+    public function checkIn(Registration $registration): JsonResponse
+    {
+        $registration->update([
+            'status' => 'checked_in',
+            'checked_in_at' => now(),
+        ]);
+
+        return response()->json($registration);
+    }
+
+    public function destroy(Registration $registration): JsonResponse
+    {
+        $registration->delete();
+
+        return response()->json(['message' => 'Registration deleted']);
+    }
+
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([

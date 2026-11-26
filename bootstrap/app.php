@@ -17,9 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ExcludeApiFromCsrf::class,
         );
 
-        $middleware->alias([
-            'auth.sanctum' => \App\Http\Middleware\AuthenticateSanctum::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

@@ -23,12 +23,20 @@ class EventController extends Controller
             'time' => 'required',
             'location' => 'required|string',
             'description' => 'required|string',
-            'poster' => 'required|string',
-            'themes' => 'required|array',
-            'pricing' => 'required|array',
-            'phones' => 'required|array',
+            'poster' => 'nullable|string',
+            'video' => 'nullable|string',
+            'themes' => 'nullable|array',
+            'pricing' => 'nullable|array',
+            'phones' => 'nullable|array',
             'status' => 'required|in:a-venir,passe',
         ]);
+
+        // Set default values for optional fields
+        $validated['poster'] = $validated['poster'] ?? '';
+        $validated['video'] = $validated['video'] ?? null;
+        $validated['themes'] = $validated['themes'] ?? [];
+        $validated['pricing'] = $validated['pricing'] ?? [];
+        $validated['phones'] = $validated['phones'] ?? [];
 
         $event = Event::create($validated);
         return response()->json($event, 201);

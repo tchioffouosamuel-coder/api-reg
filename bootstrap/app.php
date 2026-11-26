@@ -12,10 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->group('api', [
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'throttle:60,1',
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        $middleware->replace(
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+            \App\Http\Middleware\ExcludeApiFromCsrf::class,
+        );
+
+        $middleware->alias([
+            'auth.sanctum' => \App\Http\Middleware\AuthenticateSanctum::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

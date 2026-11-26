@@ -11,6 +11,11 @@ use App\Http\Controllers\Api\GalleryItemController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// Test route
+Route::post('/test', function () {
+    return response()->json(['message' => 'POST works!']);
+});
+
 // Public registration
 Route::post('/registrations', [RegistrationController::class, 'store'])->middleware('throttle:10,1');
 
